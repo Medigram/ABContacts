@@ -289,8 +289,10 @@
 	NSMutableArray *labels = [NSMutableArray array];
 	for (int i = 0; i < ABMultiValueGetCount(theProperty); i++)
 	{
-        NSString* label = CFBridgingRelease(ABMultiValueCopyLabelAtIndex(theProperty,i));
+        CFStringRef labelRef = ABMultiValueCopyLabelAtIndex(theProperty,i);
+        NSString *label = CFBridgingRelease(ABAddressBookCopyLocalizedLabel(labelRef));
 		[labels addObject:label];
+        CFRelease(labelRef);
 	}
 	CFRelease(theProperty);
 	return labels;
